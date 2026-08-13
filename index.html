@@ -1,1812 +1,1217 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
 
 <title>Space Hub</title>
 
 <style>
 
-*{
-box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-html,body{
-margin:0;
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:Arial,Helvetica,sans-serif;
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
-background:#01030a;
-color:white;
-}
-
-button{
-font-family:inherit;
+body {
+  background: #01030a;
+  color: white;
 }
 
 /* =========================
-LOADER
+   LOADER
 ========================= */
 
-#loader{
-position:fixed;
-inset:0;
-z-index:9999;
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
 
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-background:
-radial-gradient(
-ellipse at 15% 25%,
-rgba(37,99,235,.30),
-transparent 35%
-),
-radial-gradient(
-ellipse at 85% 75%,
-rgba(88,28,135,.28),
-transparent 38%
-),
-linear-gradient(
-135deg,
-#01030a,
-#030b20 35%,
-#020617 65%,
-#080316
-);
+  background:
+    radial-gradient(
+      ellipse at 15% 25%,
+      rgba(37,99,235,.30),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgba(88,28,135,.28),
+      transparent 38%
+    ),
+    linear-gradient(
+      135deg,
+      #01030a,
+      #030b20,
+      #020617,
+      #080316
+    );
 
-transition:
-opacity .6s ease,
-visibility .6s;
+  transition: opacity .6s ease,
+              visibility .6s;
 }
 
-#loader.hidden{
-opacity:0;
-visibility:hidden;
-pointer-events:none;
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.loader-content{
-position:relative;
-z-index:2;
-text-align:center;
+.loader-content {
+  text-align: center;
+  z-index: 2;
 }
 
-.loader-content h1{
-margin:0 0 20px;
+.loader-content h1 {
+  margin: 0 0 20px;
 
-font-size:
-clamp(28px,6vw,48px);
+  font-size: clamp(28px,6vw,48px);
+  letter-spacing: 3px;
 
-letter-spacing:3px;
-
-text-shadow:
-0 0 10px #60a5fa,
-0 0 30px #2563eb,
-0 0 60px rgba(37,99,235,.5);
+  text-shadow:
+    0 0 10px #60a5fa,
+    0 0 30px #2563eb,
+    0 0 60px rgba(37,99,235,.5);
 }
 
-.loader-dots{
-font-size:22px;
-color:#bfdbfe;
+.loader-dots {
+  color: #bfdbfe;
+  font-size: 20px;
 }
 
-.loader-bar{
-width:180px;
-height:4px;
+.loader-bar {
+  width: 180px;
+  height: 4px;
+  margin: 30px auto 0;
 
-margin:30px auto 0;
-
-background:
-rgba(147,197,253,.2);
-
-border-radius:4px;
-overflow:hidden;
+  background: rgba(147,197,253,.2);
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-.loader-bar-fill{
-height:100%;
-width:0%;
+.loader-bar-fill {
+  height: 100%;
+  width: 0;
 
-background:
-linear-gradient(
-90deg,
-#3b82f6,
-#8b5cf6
-);
+  background: linear-gradient(
+    90deg,
+    #3b82f6,
+    #8b5cf6
+  );
 
-animation:
-loadProgress 5s linear forwards;
+  animation: loading 4s linear forwards;
 }
 
-@keyframes loadProgress{
-
-from{
-width:0%;
-}
-
-to{
-width:100%;
-}
-
+@keyframes loading {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
 /* =========================
-PAGES
+   PAGES
 ========================= */
 
-#home,
-#film-choices,
-#tv-choices,
-#grand-galop{
+.page {
+  position: relative;
 
-position:relative;
+  width: 100%;
+  height: 100vh;
 
-width:100%;
-height:100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-overflow-y:auto;
-overflow-x:hidden;
+  -webkit-overflow-scrolling: touch;
 
--webkit-overflow-scrolling:touch;
-
-background:
-
-radial-gradient(
-ellipse at 15% 25%,
-rgba(37,99,235,.30),
-transparent 35%
-),
-
-radial-gradient(
-ellipse at 85% 75%,
-rgba(88,28,135,.28),
-transparent 38%
-),
-
-radial-gradient(
-ellipse at 50% 110%,
-rgba(15,23,42,.9),
-transparent 50%
-),
-
-linear-gradient(
-135deg,
-#01030a,
-#030b20 35%,
-#020617 65%,
-#080316
-);
+  background:
+    radial-gradient(
+      ellipse at 15% 25%,
+      rgba(37,99,235,.30),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgba(88,28,135,.28),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 50% 110%,
+      rgba(15,23,42,.9),
+      transparent 50%
+    ),
+    linear-gradient(
+      135deg,
+      #01030a,
+      #030b20,
+      #020617,
+      #080316
+    );
 }
 
-#film-choices,
-#tv-choices,
-#grand-galop{
-display:none;
+.hidden {
+  display: none !important;
 }
 
 /* =========================
-STARS
+   STARS
 ========================= */
 
 .stars,
 .stars2,
-.stars3{
+.stars3 {
+  position: absolute;
+  inset: -50%;
 
-position:absolute;
+  pointer-events: none;
 
-inset:-50%;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.95) 0 0.8px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle,
+      rgba(147,197,253,.85) 0 0.7px,
+      transparent 1px
+    );
 
-pointer-events:none;
+  background-size:
+    95px 95px,
+    155px 155px;
 
-background-image:
+  background-position:
+    15px 25px,
+    80px 120px;
 
-radial-gradient(
-circle,
-rgba(255,255,255,.95)
-0 .8px,
-transparent 1px
-),
+  animation: starsMove 35s linear infinite;
 
-radial-gradient(
-circle,
-rgba(147,197,253,.85)
-0 .7px,
-transparent 1px
-),
-
-radial-gradient(
-circle,
-rgba(255,255,255,.65)
-0 .5px,
-transparent .9px
-);
-
-background-size:
-95px 95px,
-155px 155px,
-230px 230px;
-
-background-position:
-15px 25px,
-80px 120px,
-150px 70px;
-
-animation:
-starsMove 35s linear infinite;
-
-opacity:.8;
+  opacity: .75;
 }
 
-.stars2{
+.stars2 {
+  background-size:
+    130px 130px,
+    210px 210px;
 
-background-size:
-130px 130px,
-210px 210px,
-310px 310px;
-
-animation-duration:55s;
-
-opacity:.45;
+  animation-duration: 55s;
+  opacity: .4;
 }
 
-.stars3{
+.stars3 {
+  background-size:
+    180px 180px,
+    280px 280px;
 
-background-size:
-180px 180px,
-280px 280px,
-400px 400px;
-
-animation-duration:80s;
-
-opacity:.28;
+  animation-duration: 80s;
+  opacity: .25;
 }
 
-@keyframes starsMove{
+@keyframes starsMove {
+  from {
+    transform: translate(0,0);
+  }
 
-from{
-transform:translate(0,0);
-}
-
-to{
-transform:translate(-120px,-90px);
-}
-
+  to {
+    transform: translate(-120px,-90px);
+  }
 }
 
 /* =========================
-TOP BAR
+   TOP BAR
 ========================= */
 
-.top-bar{
+.top-bar {
+  position: sticky;
 
-position:absolute;
+  top: 0;
 
-top:0;
-left:0;
-right:0;
+  height: 70px;
 
-height:70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-display:flex;
+  padding: 0 22px;
 
-justify-content:space-between;
+  z-index: 20;
 
-align-items:center;
+  background: rgba(2,6,23,.55);
 
-padding:0 25px;
+  backdrop-filter: blur(12px);
 
-z-index:20;
-
-background:
-rgba(2,6,23,.38);
-
-backdrop-filter:blur(12px);
-
-border-bottom:
-1px solid
-rgba(147,197,253,.15);
+  border-bottom:
+    1px solid rgba(147,197,253,.15);
 }
 
-.logo{
+.logo {
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 2px;
 
-font-size:17px;
-
-font-weight:bold;
-
-letter-spacing:2px;
-
-text-shadow:
-0 0 12px
-rgba(96,165,250,.6);
+  text-shadow:
+    0 0 12px rgba(96,165,250,.7);
 }
 
-.clock{
-
-display:flex;
-
-align-items:center;
-
-gap:7px;
-
-font-size:18px;
-
-font-weight:bold;
-
-text-shadow:
-0 0 10px
-rgba(255,255,255,.5);
+.clock {
+  font-size: 17px;
+  font-weight: bold;
 }
 
-.astronaut{
-font-size:20px;
+.astronaut {
+  margin-left: 5px;
 }
 
 /* =========================
-WELCOME
+   WELCOME
 ========================= */
 
-.welcome{
+.welcome {
+  position: relative;
 
-position:absolute;
+  z-index: 5;
 
-top:19%;
+  text-align: center;
 
-left:50%;
+  margin-top: 80px;
+  margin-bottom: 40px;
 
-transform:
-translateX(-50%);
-
-width:90%;
-
-text-align:center;
-
-z-index:5;
+  padding: 0 20px;
 }
 
-.welcome h1{
+.welcome h1 {
+  margin: 0;
 
-margin:0;
+  font-size: clamp(30px,6vw,52px);
 
-font-size:
-clamp(30px,6vw,55px);
-
-letter-spacing:2px;
-
-text-shadow:
-0 0 10px #60a5fa,
-0 0 30px #2563eb,
-0 0 60px
-rgba(37,99,235,.5);
+  text-shadow:
+    0 0 10px #60a5fa,
+    0 0 30px #2563eb;
 }
 
-.welcome p{
-
-margin-top:10px;
-
-color:#bfdbfe;
-
-font-size:16px;
+.welcome p {
+  color: #bfdbfe;
 }
 
 /* =========================
-CHOICES
+   MAIN BUTTONS
 ========================= */
 
-.choices{
+.choices {
+  position: relative;
 
-position:absolute;
+  z-index: 5;
 
-top:50%;
-left:50%;
+  width: min(850px,90%);
 
-transform:
-translate(-50%,-30%);
+  margin: 0 auto;
 
-display:flex;
+  display: flex;
 
-gap:30px;
+  gap: 30px;
 
-width:min(850px,90%);
-
-z-index:5;
+  padding-bottom: 100px;
 }
 
-.choice{
+.choice {
+  flex: 1;
 
-flex:1;
+  min-height: 220px;
 
-min-height:220px;
+  border:
+    1px solid rgba(147,197,253,.35);
 
-border:
-1px solid
-rgba(147,197,253,.35);
+  border-radius: 30px;
 
-border-radius:30px;
+  color: white;
 
-color:white;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30,64,175,.40),
+      rgba(15,23,42,.82)
+    );
 
-background:
-linear-gradient(
-145deg,
-rgba(30,64,175,.40),
-rgba(15,23,42,.78)
-);
+  backdrop-filter: blur(15px);
 
-backdrop-filter:blur(15px);
+  cursor: pointer;
 
-box-shadow:
-0 15px 40px
-rgba(0,0,0,.45);
+  transition: .25s;
 
-cursor:pointer;
-
-transition:
-transform .25s,
-box-shadow .25s,
-border-color .25s;
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.45);
 }
 
-.choice:hover{
+.choice:hover {
+  transform: translateY(-7px);
 
-transform:
-translateY(-8px);
+  border-color: #60a5fa;
 
-border-color:#60a5fa;
-
-box-shadow:
-0 20px 50px
-rgba(37,99,235,.35);
+  box-shadow:
+    0 20px 50px rgba(37,99,235,.35);
 }
 
-.choice:active{
-transform:scale(.96);
+.big-icon {
+  display: block;
+
+  font-size: 65px;
+
+  margin-bottom: 15px;
 }
 
-.big-icon{
+.title {
+  display: block;
 
-display:block;
+  font-size: 22px;
+  font-weight: bold;
 
-font-size:65px;
-
-margin-bottom:15px;
-
-filter:
-drop-shadow(
-0 0 12px
-rgba(96,165,250,.35)
-);
+  letter-spacing: 3px;
 }
 
-.title{
+.subtitle {
+  display: block;
 
-display:block;
+  margin-top: 8px;
 
-font-size:22px;
-
-font-weight:bold;
-
-letter-spacing:3px;
-}
-
-.subtitle{
-
-display:block;
-
-margin-top:8px;
-
-color:#93c5fd;
+  color: #93c5fd;
 }
 
 /* =========================
-SUB CHOICES
+   SOURCE BUTTONS
 ========================= */
 
-.sub-choices{
+.source-container {
+  position: relative;
 
-position:absolute;
+  z-index: 5;
 
-top:50%;
+  width: min(750px,90%);
 
-left:50%;
+  margin: 0 auto;
 
-transform:
-translate(-50%,-30%);
+  display: flex;
 
-display:flex;
+  gap: 25px;
 
-gap:20px;
-
-width:min(1000px,92%);
-
-z-index:5;
+  padding-bottom: 100px;
 }
 
-.sub-choice{
+.source {
+  position: relative;
 
-position:relative;
+  flex: 1;
 
-flex:1;
+  min-height: 200px;
 
-min-height:200px;
+  border:
+    1px solid rgba(147,197,253,.35);
 
-border:
-1px solid
-rgba(147,197,253,.35);
+  border-radius: 28px;
 
-border-radius:28px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30,64,175,.45),
+      rgba(15,23,42,.82)
+    );
 
-color:white;
+  color: white;
 
-background:
-linear-gradient(
-145deg,
-rgba(30,64,175,.45),
-rgba(15,23,42,.82)
-);
+  cursor: pointer;
 
-backdrop-filter:blur(15px);
-
-box-shadow:
-0 15px 40px
-rgba(0,0,0,.45);
-
-cursor:pointer;
-
-transition:
-transform .25s,
-box-shadow .25s,
-border-color .25s;
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
+  transition: .25s;
 }
 
-.sub-choice:hover{
+.source:hover {
+  transform: translateY(-7px);
 
-transform:
-translateY(-8px);
+  border-color: #60a5fa;
 
-border-color:#60a5fa;
-
-box-shadow:
-0 20px 50px
-rgba(37,99,235,.35);
+  box-shadow:
+    0 20px 50px rgba(37,99,235,.35);
 }
 
-.number{
+.source-number {
+  display: block;
 
-font-size:48px;
+  font-size: 48px;
 
-font-weight:bold;
-
-margin-bottom:10px;
-
-text-shadow:
-0 0 15px #60a5fa;
+  margin-bottom: 10px;
 }
 
-.sub-title{
+.source-title {
+  display: block;
 
-font-size:20px;
+  font-size: 20px;
 
-font-weight:bold;
+  font-weight: bold;
 
-letter-spacing:2px;
+  letter-spacing: 2px;
 }
 
-.sub-subtitle{
+.source-subtitle {
+  display: block;
 
-margin-top:8px;
+  margin-top: 8px;
 
-color:#93c5fd;
-
-font-size:14px;
+  color: #93c5fd;
 }
 
 /* =========================
-BEST CHOICE
+   MEILLEUR CHOIX
 ========================= */
 
-.best-choice{
+.best {
+  position: absolute;
 
-border:
-2px solid #60a5fa !important;
+  top: -12px;
+  right: 15px;
 
-box-shadow:
+  padding: 7px 12px;
 
-0 0 25px
-rgba(59,130,246,.35),
+  border-radius: 20px;
 
-0 15px 45px
-rgba(37,99,235,.4);
-}
+  background: linear-gradient(
+    90deg,
+    #2563eb,
+    #7c3aed
+  );
 
-.best-badge{
+  color: white;
 
-position:absolute;
+  font-size: 12px;
+  font-weight: bold;
 
-top:12px;
-
-right:12px;
-
-padding:7px 10px;
-
-border-radius:12px;
-
-background:
-linear-gradient(
-90deg,
-#2563eb,
-#7c3aed
-);
-
-font-size:10px;
-
-font-weight:bold;
-
-letter-spacing:1px;
+  box-shadow:
+    0 0 18px rgba(59,130,246,.5);
 }
 
 /* =========================
-BACK
+   GRAND GALOP
 ========================= */
 
-.back-button{
+.series-card {
+  position: relative;
 
-position:absolute;
+  z-index: 5;
 
-top:90px;
+  width: min(850px,92%);
 
-left:25px;
+  margin: 0 auto 30px;
 
-z-index:50;
+  padding: 25px;
 
-border:
-1px solid
-rgba(147,197,253,.25);
+  border-radius: 25px;
 
-background:
-rgba(23,37,84,.85);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30,64,175,.45),
+      rgba(15,23,42,.85)
+    );
 
-color:white;
+  border:
+    1px solid rgba(147,197,253,.3);
 
-padding:12px 20px;
+  text-align: center;
+}
 
-border-radius:14px;
+.series-card h2 {
+  margin: 0 0 8px;
 
-font-size:15px;
+  font-size: 28px;
+}
 
-font-weight:bold;
-
-cursor:pointer;
-
-backdrop-filter:blur(8px);
+.series-card p {
+  color: #bfdbfe;
 }
 
 /* =========================
-GRAND GALOP
+   EPISODES
 ========================= */
 
-.galop-content{
+.episodes {
+  position: relative;
 
-position:relative;
+  z-index: 5;
 
-z-index:5;
+  width: min(850px,92%);
 
-width:min(950px,92%);
+  margin: 0 auto;
 
-margin:auto;
+  display: grid;
 
-padding-top:145px;
+  grid-template-columns:
+    repeat(2,1fr);
 
-padding-bottom:100px;
+  gap: 14px;
+
+  padding-bottom: 120px;
 }
 
-.galop-header{
+.episode {
+  min-height: 70px;
 
-text-align:center;
+  border:
+    1px solid rgba(147,197,253,.25);
 
-margin-bottom:30px;
+  border-radius: 18px;
+
+  background:
+    rgba(15,23,42,.82);
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+  text-align: left;
+
+  padding: 0 18px;
 }
 
-.galop-header h1{
+.episode:hover {
+  transform: translateY(-3px);
 
-font-size:
-clamp(30px,6vw,52px);
+  border-color: #60a5fa;
 
-margin:0;
-
-text-shadow:
-0 0 15px #60a5fa,
-0 0 30px #2563eb,
-0 0 60px
-rgba(37,99,235,.5);
+  background:
+    rgba(30,64,175,.55);
 }
 
-.galop-header p{
-
-color:#bfdbfe;
-
-font-size:16px;
+.episode span {
+  color: #93c5fd;
 }
 
 /* =========================
-SEASONS
+   BACK BUTTON
 ========================= */
 
-.season-grid{
+.back {
+  position: relative;
 
-display:grid;
+  z-index: 10;
 
-grid-template-columns:
-repeat(3,1fr);
+  margin:
+    20px 0 0 22px;
 
-gap:18px;
+  padding:
+    11px 18px;
 
-margin-bottom:25px;
-}
+  border-radius: 14px;
 
-.season-card{
+  border:
+    1px solid rgba(147,197,253,.25);
 
-border:
-1px solid
-rgba(147,197,253,.3);
+  background:
+    rgba(23,37,84,.85);
 
-border-radius:24px;
+  color: white;
 
-padding:25px 15px;
+  font-weight: bold;
 
-background:
-linear-gradient(
-145deg,
-rgba(30,64,175,.45),
-rgba(15,23,42,.85)
-);
-
-color:white;
-
-cursor:pointer;
-
-text-align:center;
-
-transition:.25s;
-}
-
-.season-card:hover{
-
-transform:
-translateY(-5px);
-
-border-color:#60a5fa;
-}
-
-.season-card.active{
-
-border:
-2px solid #60a5fa;
-
-box-shadow:
-0 0 25px
-rgba(59,130,246,.35);
-}
-
-.season-icon{
-
-font-size:42px;
-}
-
-.season-card h2{
-
-margin:
-10px 0 5px;
-}
-
-.season-card p{
-
-margin:0;
-
-color:#93c5fd;
+  cursor: pointer;
 }
 
 /* =========================
-EPISODE PANEL
+   VIDEO
 ========================= */
 
-.episode-panel{
+#videoPage {
+  position: fixed;
 
-display:none;
+  inset: 0;
 
-background:
-rgba(2,6,23,.78);
+  z-index: 100;
 
-border:
-1px solid
-rgba(147,197,253,.25);
+  display: none;
 
-border-radius:25px;
-
-padding:20px;
-
-backdrop-filter:blur(15px);
+  background: #000;
 }
 
-.episode-panel.active{
-display:block;
+.video-top {
+  height: 58px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+
+  background: #020617;
 }
 
-.episode-panel h2{
+.video-title {
+  font-size: 14px;
 
-text-align:center;
+  font-weight: bold;
 
-margin-top:5px;
+  color: white;
+}
+
+.video-back {
+  border: none;
+
+  border-radius: 10px;
+
+  padding: 9px 14px;
+
+  background: #172554;
+
+  color: white;
+
+  font-weight: bold;
+}
+
+#youtubeFrame {
+  width: 100%;
+
+  height:
+    calc(100% - 58px);
+
+  border: none;
 }
 
 /* =========================
-PLAYER
+   MUSIC
 ========================= */
 
-.player{
+.music-toggle {
+  position: fixed;
 
-position:relative;
+  bottom: 20px;
+  right: 20px;
 
-width:100%;
+  z-index: 200;
 
-aspect-ratio:16/9;
+  border:
+    1px solid rgba(147,197,253,.35);
 
-border-radius:18px;
+  background:
+    rgba(23,37,84,.9);
 
-overflow:hidden;
+  color: white;
 
-background:#000;
+  padding: 11px 16px;
 
-margin-bottom:20px;
+  border-radius: 14px;
 
-box-shadow:
-0 0 30px
-rgba(37,99,235,.25);
-}
-
-.player iframe{
-
-position:absolute;
-
-inset:0;
-
-width:100%;
-
-height:100%;
-
-border:0;
+  font-weight: bold;
 }
 
 /* =========================
-EPISODES
+   MOBILE
 ========================= */
 
-.episode-list{
+@media(max-width:700px) {
 
-display:grid;
+  .choices,
+  .source-container {
+    flex-direction: column;
 
-grid-template-columns:
-repeat(2,1fr);
+    width: 82%;
 
-gap:10px;
+    gap: 15px;
+  }
 
-max-height:430px;
+  .choice {
+    min-height: 160px;
+  }
 
-overflow-y:auto;
+  .source {
+    min-height: 150px;
+  }
 
-padding-right:3px;
-}
+  .big-icon {
+    font-size: 45px;
+  }
 
-.episode-button{
+  .episodes {
+    grid-template-columns: 1fr;
 
-border:
-1px solid
-rgba(147,197,253,.20);
+    width: 88%;
+  }
 
-border-radius:13px;
-
-padding:13px;
-
-background:
-rgba(15,23,42,.90);
-
-color:white;
-
-text-align:left;
-
-cursor:pointer;
-
-transition:
-background .2s,
-border-color .2s,
-transform .2s;
-}
-
-.episode-button:hover{
-
-background:
-rgba(37,99,235,.5);
-
-border-color:#60a5fa;
-
-transform:
-translateY(-2px);
-}
-
-.episode-button.selected{
-
-border-color:#60a5fa;
-
-background:
-rgba(37,99,235,.45);
-
-box-shadow:
-0 0 15px
-rgba(59,130,246,.20);
-}
-
-.episode-button small{
-
-display:block;
-
-margin-top:4px;
-
-color:#93c5fd;
-
-font-size:12px;
-}
-
-/* =========================
-BROWSER
-========================= */
-
-#browser{
-
-position:fixed;
-
-inset:0;
-
-display:none;
-
-background:white;
-
-z-index:100;
-}
-
-.browser-bar{
-
-position:absolute;
-
-top:0;
-
-left:0;
-
-right:0;
-
-height:58px;
-
-display:flex;
-
-justify-content:flex-end;
-
-align-items:center;
-
-padding:0 12px;
-
-background:#020617;
-
-z-index:101;
-}
-
-.menu-button{
-
-border:none;
-
-background:#172554;
-
-color:white;
-
-padding:10px 16px;
-
-border-radius:12px;
-
-font-size:15px;
-
-font-weight:bold;
-
-cursor:pointer;
-}
-
-#webpage{
-
-position:absolute;
-
-top:58px;
-
-left:0;
-
-width:100%;
-
-height:calc(100% - 58px);
-
-border:none;
-}
-
-/* =========================
-MUSIC
-========================= */
-
-.music-toggle{
-
-position:fixed;
-
-bottom:25px;
-
-right:25px;
-
-z-index:200;
-
-border:
-1px solid
-rgba(147,197,253,.35);
-
-background:
-rgba(23,37,84,.85);
-
-color:white;
-
-padding:12px 18px;
-
-border-radius:14px;
-
-font-size:14px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-backdrop-filter:blur(10px);
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:700px){
-
-.choices{
-
-flex-direction:column;
-
-width:80%;
-
-gap:15px;
-
-transform:
-translate(-50%,-20%);
-}
-
-.choice{
-
-min-height:160px;
-}
-
-.big-icon{
-
-font-size:45px;
-
-margin-bottom:8px;
-}
-
-.sub-choices{
-
-flex-direction:column;
-
-width:80%;
-
-gap:15px;
-
-transform:
-translate(-50%,-20%);
-}
-
-.sub-choice{
-
-min-height:145px;
-}
-
-.season-grid{
-
-grid-template-columns:1fr;
-}
-
-.episode-list{
-
-grid-template-columns:1fr;
-}
-
-.galop-content{
-
-padding-top:125px;
-}
-
-}
-
-@media(max-height:600px){
-
-.top-bar{
-height:55px;
-}
-
-.welcome{
-top:13%;
-}
-
-.welcome h1{
-font-size:30px;
-}
-
-.choice,
-.sub-choice{
-min-height:140px;
-}
-
-.big-icon{
-font-size:40px;
-}
-
-.back-button{
-top:70px;
-padding:10px 16px;
-}
+  .welcome {
+    margin-top: 60px;
+  }
 
 }
 
 </style>
-
 </head>
 
 <body>
 
-
 <!-- =========================
-LOADER
+     LOADER
 ========================= -->
 
 <div id="loader">
 
-<div class="loader-content">
+  <div class="loader-content">
 
-<h1>🌌 SPACE HUB</h1>
+    <h1>🌌 SPACE HUB</h1>
 
-<div class="loader-dots">
-Chargement...
+    <div class="loader-dots">
+      Chargement...
+    </div>
+
+    <div class="loader-bar">
+
+      <div class="loader-bar-fill"></div>
+
+    </div>
+
+  </div>
+
 </div>
-
-<div class="loader-bar">
-
-<div class="loader-bar-fill"></div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div id="app">
 
 
 <!-- =========================
-ACCUEIL
+     MENU PRINCIPAL
 ========================= -->
 
-<main id="home">
+<main id="home" class="page">
 
-<div class="stars"></div>
-<div class="stars stars2"></div>
-<div class="stars stars3"></div>
+  <div class="stars"></div>
+  <div class="stars stars2"></div>
+  <div class="stars stars3"></div>
 
-<div class="top-bar">
+  <div class="top-bar">
 
-<div class="logo">
-🌌 SPACE HUB
-</div>
+    <div class="logo">
+      🌌 SPACE HUB
+    </div>
 
-<div class="clock">
+    <div class="clock">
+      <span id="time">00:00:00</span>
+      <span class="astronaut">👨‍🚀</span>
+    </div>
 
-<span id="time">
-00:00:00
-</span>
+  </div>
 
-<span class="astronaut">
-👨‍🚀
-</span>
+  <div class="welcome">
 
-</div>
+    <h1>Bienvenue</h1>
 
-</div>
+    <p>
+      Choisis ton univers
+    </p>
 
+  </div>
 
-<div class="welcome">
+  <div class="choices">
 
-<h1>
-Bienvenue
-</h1>
+    <button
+      class="choice"
+      onclick="showPage('filmsPage')">
 
-<p>
-Choisis ton univers
-</p>
+      <span class="big-icon">
+        🍿
+      </span>
 
-</div>
+      <span class="title">
+        FILMS
+      </span>
 
+      <span class="subtitle">
+        Découvrir
+      </span>
 
-<div class="choices">
-
-<button
-class="choice"
-onclick="ouvrirFilms()">
-
-<span class="big-icon">
-🍿
-</span>
-
-<span class="title">
-FILMS
-</span>
-
-<span class="subtitle">
-Découvrir
-</span>
-
-</button>
+    </button>
 
 
-<button
-class="choice"
-onclick="ouvrirTV()">
+    <button
+      class="choice"
+      onclick="showPage('tvPage')">
 
-<span class="big-icon">
-📺
-</span>
+      <span class="big-icon">
+        📺
+      </span>
 
-<span class="title">
-TV
-</span>
+      <span class="title">
+        TV
+      </span>
 
-<span class="subtitle">
-Regarder
-</span>
+      <span class="subtitle">
+        Regarder
+      </span>
 
-</button>
+    </button>
 
-</div>
+  </div>
 
 </main>
 
 
 <!-- =========================
-FILMS
+     FILMS
 ========================= -->
 
-<section id="film-choices">
+<section
+  id="filmsPage"
+  class="page hidden">
 
-<div class="stars"></div>
-<div class="stars stars2"></div>
-<div class="stars stars3"></div>
+  <div class="stars"></div>
+  <div class="stars stars2"></div>
+  <div class="stars stars3"></div>
 
-<div class="top-bar">
+  <div class="top-bar">
 
-<div class="logo">
-🌌 SPACE HUB
-</div>
+    <div class="logo">
+      🌌 SPACE HUB
+    </div>
 
-<div class="clock">
+    <div class="clock">
+      <span class="page-time">
+        00:00:00
+      </span>
+      👨‍🚀
+    </div>
 
-<span id="time-films">
-00:00:00
-</span>
+  </div>
 
-<span class="astronaut">
-👨‍🚀
-</span>
+  <button
+    class="back"
+    onclick="showPage('home')">
 
-</div>
+    ← Retour
 
-</div>
+  </button>
 
+  <div class="welcome">
 
-<button
-class="back-button"
-onclick="retourAccueil()">
+    <h1>
+      Films 🍿
+    </h1>
 
-← Retour
+    <p>
+      Choisis ta source
+    </p>
 
-</button>
-
-
-<div class="welcome">
-
-<h1>
-Films 🍿
-</h1>
-
-<p>
-Choisis ta source
-</p>
-
-</div>
+  </div>
 
 
-<div class="sub-choices">
+  <div class="source-container">
+
+    <button
+      class="source"
+      onclick="openExternal('https://1jour1film0826.online')">
+
+      <div class="best">
+        ⭐ MEILLEUR CHOIX
+      </div>
+
+      <span class="source-number">
+        1️⃣
+      </span>
+
+      <span class="source-title">
+        SOURCE 1
+      </span>
+
+      <span class="source-subtitle">
+        Purstream
+      </span>
+
+    </button>
 
 
-<button
-class="sub-choice best-choice"
-onclick="ouvrirSite('https://1jour1film0826.online')">
+    <button
+      class="source"
+      onclick="openExternal('https://movix.fun')">
 
-<div class="best-badge">
-⭐ MEILLEUR CHOIX
-</div>
+      <span class="source-number">
+        2️⃣
+      </span>
 
-<span class="number">
-1️⃣
-</span>
+      <span class="source-title">
+        SOURCE 2
+      </span>
 
-<span class="sub-title">
-SOURCE 1
-</span>
+      <span class="source-subtitle">
+        Movix
+      </span>
 
-<span class="sub-subtitle">
-Purstream
-</span>
+    </button>
 
-</button>
+  </div>
 
 
-<button
-class="sub-choice"
-onclick="ouvrirSite('https://movix.fun')">
+  <!-- GRAND GALOP -->
 
-<span class="number">
-2️⃣
-</span>
+  <div class="series-card">
 
-<span class="sub-title">
-SOURCE 2
-</span>
+    <h2>
+      🐎 Grand Galop
+    </h2>
 
-<span class="sub-subtitle">
-Movix
-</span>
+    <p>
+      Saison 1 — 26 épisodes
+    </p>
 
-</button>
+    <button
+      class="source"
+      style="width:100%;min-height:100px;"
+      onclick="showPage('grandGalopPage')">
 
+      <span class="source-title">
+        ▶ OUVRIR LA SÉRIE
+      </span>
 
-<button
-class="sub-choice"
-onclick="ouvrirGrandGalop()">
+      <span class="source-subtitle">
+        Tous les épisodes de la saison 1
+      </span>
 
-<span class="number">
-🐴
-</span>
+    </button>
 
-<span class="sub-title">
-GRAND GALOP
-</span>
-
-<span class="sub-subtitle">
-3 saisons • 78 épisodes
-</span>
-
-</button>
-
-
-</div>
+  </div>
 
 </section>
 
 
 <!-- =========================
-TV
+     TV
 ========================= -->
 
-<section id="tv-choices">
+<section
+  id="tvPage"
+  class="page hidden">
 
-<div class="stars"></div>
-<div class="stars stars2"></div>
-<div class="stars stars3"></div>
+  <div class="stars"></div>
+  <div class="stars stars2"></div>
+  <div class="stars stars3"></div>
 
-<div class="top-bar">
+  <div class="top-bar">
 
-<div class="logo">
-🌌 SPACE HUB
-</div>
+    <div class="logo">
+      🌌 SPACE HUB
+    </div>
 
-<div class="clock">
+    <div class="clock">
+      <span class="page-time">
+        00:00:00
+      </span>
+      👨‍🚀
+    </div>
 
-<span id="time-tv">
-00:00:00
-</span>
+  </div>
 
-<span class="astronaut">
-👨‍🚀
-</span>
+  <button
+    class="back"
+    onclick="showPage('home')">
 
-</div>
+    ← Retour
 
-</div>
+  </button>
 
+  <div class="welcome">
 
-<button
-class="back-button"
-onclick="retourAccueil()">
+    <h1>
+      TV 📺
+    </h1>
 
-← Retour
+    <p>
+      Choisis ta source
+    </p>
 
-</button>
-
-
-<div class="welcome">
-
-<h1>
-TV 📺
-</h1>
-
-<p>
-Choisis ta source
-</p>
-
-</div>
+  </div>
 
 
-<div class="sub-choices">
+  <div class="source-container">
+
+    <button
+      class="source"
+      onclick="openExternal('https://livewatch.top')">
+
+      <span class="source-number">
+        1️⃣
+      </span>
+
+      <span class="source-title">
+        SOURCE 1
+      </span>
+
+      <span class="source-subtitle">
+        LiveWatch
+      </span>
+
+    </button>
 
 
-<button
-class="sub-choice"
-onclick="ouvrirSite('https://livewatch.top')">
+    <button
+      class="source"
+      onclick="openExternal('https://witv.football')">
 
-<span class="number">
-1️⃣
-</span>
+      <div class="best">
+        ⭐ MEILLEUR CHOIX
+      </div>
 
-<span class="sub-title">
-SOURCE 1
-</span>
+      <span class="source-number">
+        2️⃣
+      </span>
 
-<span class="sub-subtitle">
-LiveWatch
-</span>
+      <span class="source-title">
+        SOURCE 2
+      </span>
 
-</button>
+      <span class="source-subtitle">
+        VegetaTV
+      </span>
 
+    </button>
 
-<button
-class="sub-choice best-choice"
-onclick="ouvrirSite('https://witv.football')">
-
-<div class="best-badge">
-⭐ MEILLEUR CHOIX
-</div>
-
-<span class="number">
-2️⃣
-</span>
-
-<span class="sub-title">
-SOURCE 2
-</span>
-
-<span class="sub-subtitle">
-VegetaTV
-</span>
-
-</button>
-
-
-</div>
+  </div>
 
 </section>
 
 
 <!-- =========================
-GRAND GALOP
+     GRAND GALOP
 ========================= -->
 
-<section id="grand-galop">
+<section
+  id="grandGalopPage"
+  class="page hidden">
 
-<div class="stars"></div>
-<div class="stars stars2"></div>
-<div class="stars stars3"></div>
+  <div class="stars"></div>
+  <div class="stars stars2"></div>
+  <div class="stars stars3"></div>
 
+  <div class="top-bar">
 
-<div class="top-bar">
+    <div class="logo">
+      🌌 SPACE HUB
+    </div>
 
-<div class="logo">
-🌌 SPACE HUB
-</div>
+    <div class="clock">
+      <span class="page-time">
+        00:00:00
+      </span>
+      👨‍🚀
+    </div>
 
-<div class="clock">
+  </div>
 
-<span id="time-galop">
-00:00:00
-</span>
 
-<span class="astronaut">
-👨‍🚀
-</span>
+  <button
+    class="back"
+    onclick="showPage('filmsPage')">
 
-</div>
+    ← Films
 
-</div>
+  </button>
 
 
-<button
-class="back-button"
-onclick="retourFilms()">
+  <div class="welcome">
 
-← Films
+    <h1>
+      🐎 Grand Galop
+    </h1>
 
-</button>
+    <p>
+      Saison 1 — Épisodes
+    </p>
 
+  </div>
 
-<div class="galop-content">
 
+  <div
+    id="episodes"
+    class="episodes">
 
-<div class="galop-header">
-
-<h1>
-🐴 GRAND GALOP
-</h1>
-
-<p>
-Les aventures de Lisa, Carole et Stéphanie
-</p>
-
-</div>
-
-
-<div class="season-grid">
-
-
-<button
-id="seasonButton1"
-class="season-card"
-onclick="ouvrirSaison(1)">
-
-<div class="season-icon">
-🐴
-</div>
-
-<h2>
-Saison 1
-</h2>
-
-<p>
-26 épisodes
-</p>
-
-</button>
-
-
-<button
-id="seasonButton2"
-class="season-card"
-onclick="ouvrirSaison(2)">
-
-<div class="season-icon">
-🐎
-</div>
-
-<h2>
-Saison 2
-</h2>
-
-<p>
-26 épisodes
-</p>
-
-</button>
-
-
-<button
-id="seasonButton3"
-class="season-card"
-onclick="ouvrirSaison(3)">
-
-<div class="season-icon">
-🏇
-</div>
-
-<h2>
-Saison 3
-</h2>
-
-<p>
-26 épisodes
-</p>
-
-</button>
-
-</div>
-
-
-<!-- =========================
-SAISON 1
-========================= -->
-
-<div
-id="season1"
-class="episode-panel">
-
-<h2>
-🐴 Grand Galop — Saison 1
-</h2>
-
-
-<div class="player">
-
-<iframe
-id="player1"
-src="https://www.youtube.com/embed/9Ip-n1-X1gg?playsinline=1&rel=0&vq=hd1080"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen>
-</iframe>
-
-</div>
-
-
-<div
-id="episodes1"
-class="episode-list">
-</div>
-
-</div>
-
-
-<!-- =========================
-SAISON 2
-========================= -->
-
-<div
-id="season2"
-class="episode-panel">
-
-<h2>
-🐎 Grand Galop — Saison 2
-</h2>
-
-
-<div class="player">
-
-<iframe
-id="player2"
-src="https://www.youtube.com/embed?listType=playlist&list=PLRRc9uNlbQLYQJWBrl5M43wnk8AMa7pFv&playsinline=1&rel=0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen>
-</iframe>
-
-</div>
-
-
-<div
-id="episodes2"
-class="episode-list">
-</div>
-
-</div>
-
-
-<!-- =========================
-SAISON 3
-========================= -->
-
-<div
-id="season3"
-class="episode-panel">
-
-<h2>
-🏇 Grand Galop — Saison 3
-</h2>
-
-
-<div class="player">
-
-<iframe
-id="player3"
-src="https://www.youtube.com/embed?listType=playlist&list=PLZf6ZLzTf5RF_vWcxxxPRgtGboCvcw9dW&playsinline=1&rel=0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen>
-</iframe>
-
-</div>
-
-
-<div
-id="episodes3"
-class="episode-list">
-</div>
-
-</div>
-
-
-</div>
+  </div>
 
 </section>
 
 
 <!-- =========================
-NAVIGATEUR
+     LECTEUR
 ========================= -->
 
-<section id="browser">
+<section id="videoPage">
 
-<div class="browser-bar">
+  <div class="video-top">
 
-<button
-class="menu-button"
-onclick="retourAccueil()">
+    <div
+      id="videoTitle"
+      class="video-title">
 
-☰ Menu
+      Grand Galop
 
-</button>
+    </div>
 
-</div>
+    <button
+      class="video-back"
+      onclick="closeVideo()">
 
-<iframe
-id="webpage">
-</iframe>
+      ← Retour
+
+    </button>
+
+  </div>
+
+
+  <iframe
+    id="youtubeFrame"
+    allow="accelerometer;
+           autoplay;
+           clipboard-write;
+           encrypted-media;
+           gyroscope;
+           picture-in-picture;
+           web-share"
+    allowfullscreen>
+  </iframe>
 
 </section>
 
 
-</div>
-
-
 <!-- =========================
-MUSIQUE
+     MUSIQUE
 ========================= -->
 
 <button
-class="music-toggle"
-id="musicBtn"
-onclick="toggleMusic()">
+  class="music-toggle"
+  id="musicBtn"
+  onclick="toggleMusic()">
 
-🔊 Couper
+  🔊 Couper
 
 </button>
 
 
 <audio
-id="bgMusic"
-loop
-preload="auto">
+  id="bgMusic"
+  loop
+  preload="auto">
 
-<source
-src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_4c5c0c0c5c.mp3?filename=elevator-music-113280.mp3"
-type="audio/mpeg">
+  <source
+    src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_4c5c0c0c5c.mp3?filename=elevator-music-113280.mp3"
+    type="audio/mpeg">
 
 </audio>
 
@@ -1814,688 +1219,349 @@ type="audio/mpeg">
 <script>
 
 /* =========================
-LOADER
+   EPISODES GRAND GALOP
 ========================= */
 
-window.addEventListener(
-"load",
-function(){
+const episodes = [
 
-setTimeout(
-function(){
+  "https://www.youtube.com/watch?v=9Ip-n1-X1gg",
 
-document
-.getElementById("loader")
-.classList.add("hidden");
+  "https://www.youtube.com/watch?v=OflMQJQ7A7U",
 
-tryPlayMusic();
+  "https://www.youtube.com/watch?v=88lYN8YY968",
 
-},
-5000
-);
+  "https://www.youtube.com/watch?v=i1RwbfOU9XA",
 
-}
-);
+  "https://www.youtube.com/watch?v=RlEAlyMD7vg",
+
+  "https://www.youtube.com/watch?v=HgcF1ZHgxkM",
+
+  "https://www.youtube.com/watch?v=B1sJVP6VEU4",
+
+  "https://www.youtube.com/watch?v=7YAa1hpux4k",
+
+  "https://www.youtube.com/watch?v=GEyeIiKdMMQ",
+
+  "https://www.youtube.com/watch?v=MsHGKHwNKmU",
+
+  "https://www.youtube.com/watch?v=I40u8Zgj9EA",
+
+  "https://www.youtube.com/watch?v=pr3hph1zHD0",
+
+  "https://www.youtube.com/watch?v=mxDzGaJgqFY",
+
+  "https://www.youtube.com/watch?v=nQKi72ErLKw",
+
+  "https://www.youtube.com/watch?v=xbl_uOcImB0",
+
+  "https://www.youtube.com/watch?v=58GxgoqpYgk",
+
+  "https://www.youtube.com/watch?v=vfDaJ0yOJrY",
+
+  "https://www.youtube.com/watch?v=WdfmUv_aXWc",
+
+  "https://www.youtube.com/watch?v=Ozb1Td2Obb8",
+
+  "https://www.youtube.com/watch?v=dio-YOrxDxk",
+
+  "https://www.youtube.com/watch?v=-NLr04kLVFU",
+
+  "https://www.youtube.com/watch?v=7LiRDFTToYY",
+
+  "https://www.youtube.com/watch?v=PqsWFtWMYqc",
+
+  "https://www.youtube.com/watch?v=2ag9GrqZ94g",
+
+  "https://www.youtube.com/watch?v=Zzpi43m-Irg",
+
+  "https://www.youtube.com/watch?v=XfJtrwG5PCI"
+
+];
 
 
 /* =========================
-MUSIQUE
+   CRÉATION DES ÉPISODES
 ========================= */
 
-let musicPlaying=false;
-
-const audio=
-document.getElementById("bgMusic");
-
-const musicBtn=
-document.getElementById("musicBtn");
-
-audio.volume=.35;
+const episodesContainer =
+  document.getElementById("episodes");
 
 
-function tryPlayMusic(){
+episodes.forEach(function(url, index) {
 
-audio.play()
+  const episodeNumber = index + 1;
 
-.then(function(){
+  const button =
+    document.createElement("button");
 
-musicPlaying=true;
+  button.className = "episode";
 
-musicBtn.textContent=
-"🔊 Couper";
+  button.innerHTML =
+    "▶ Épisode " +
+    episodeNumber +
+    "<br><span>Grand Galop — Saison 1</span>";
 
-})
+  button.onclick = function() {
 
-.catch(function(){
+    openEpisode(
+      url,
+      episodeNumber
+    );
 
-musicPlaying=false;
+  };
 
-musicBtn.textContent=
-"🔇 Remettre";
+  episodesContainer.appendChild(button);
 
 });
 
-}
 
+/* =========================
+   NAVIGATION
+========================= */
 
-function toggleMusic(){
+function showPage(id) {
 
-if(musicPlaying){
+  const pages =
+    document.querySelectorAll(".page");
 
-audio.pause();
+  pages.forEach(function(page) {
 
-musicPlaying=false;
+    page.classList.add("hidden");
 
-musicBtn.textContent=
-"🔇 Remettre";
+  });
 
-}
-
-else{
-
-audio.play()
-
-.then(function(){
-
-musicPlaying=true;
-
-musicBtn.textContent=
-"🔊 Couper";
-
-});
-
-}
+  document
+    .getElementById(id)
+    .classList.remove("hidden");
 
 }
 
 
 /* =========================
-HORLOGE
+   OUVRIR UN ÉPISODE
 ========================= */
 
-function updateClock(){
+function openEpisode(url, number) {
 
-const now=
-new Date();
+  /*
+    On récupère l'ID directement
+    depuis l'URL complète.
 
-const time=
+    Exemple :
 
-String(
-now.getHours()
-).padStart(2,"0")
+    https://www.youtube.com/watch?v=ABC123
 
-+":"
+    devient :
 
-+
-String(
-now.getMinutes()
-).padStart(2,"0")
+    ABC123
+  */
 
-+":"
-
-+
-String(
-now.getSeconds()
-).padStart(2,"0");
+  const videoId =
+    new URL(url).searchParams.get("v");
 
 
-[
-"time",
-"time-films",
-"time-tv",
-"time-galop"
-]
-.forEach(
-function(id){
+  if (!videoId) {
 
-const element=
-document.getElementById(id);
+    window.open(url, "_blank");
 
-if(element){
+    return;
 
-element.textContent=time;
+  }
+
+
+  /*
+    IMPORTANT :
+
+    Chaque bouton possède son propre
+    lien complet.
+
+    On construit ensuite l'URL
+    d'intégration correspondant
+    exactement à cette vidéo.
+  */
+
+  const embedUrl =
+    "https://www.youtube.com/embed/" +
+    videoId +
+    "?rel=0&autoplay=1";
+
+
+  document
+    .getElementById("videoTitle")
+    .textContent =
+      "🐎 Grand Galop — Saison 1 — Épisode " +
+      number;
+
+
+  document
+    .getElementById("youtubeFrame")
+    .src = embedUrl;
+
+
+  document
+    .getElementById("videoPage")
+    .style.display = "block";
 
 }
 
-}
-);
+
+/* =========================
+   FERMER VIDÉO
+========================= */
+
+function closeVideo() {
+
+  document
+    .getElementById("youtubeFrame")
+    .src = "";
+
+  document
+    .getElementById("videoPage")
+    .style.display = "none";
 
 }
+
+
+/* =========================
+   SITES EXTERNES
+========================= */
+
+function openExternal(url) {
+
+  /*
+    Ouverture du site dans un nouvel onglet
+    du navigateur si nécessaire.
+  */
+
+  window.open(url, "_blank");
+
+}
+
+
+/* =========================
+   HORLOGE
+========================= */
+
+function updateClock() {
+
+  const now =
+    new Date();
+
+  const h =
+    String(
+      now.getHours()
+    ).padStart(2,"0");
+
+  const m =
+    String(
+      now.getMinutes()
+    ).padStart(2,"0");
+
+  const s =
+    String(
+      now.getSeconds()
+    ).padStart(2,"0");
+
+
+  const time =
+    h + ":" + m + ":" + s;
+
+
+  document
+    .getElementById("time")
+    .textContent = time;
+
+
+  document
+    .querySelectorAll(".page-time")
+    .forEach(function(element) {
+
+      element.textContent = time;
+
+    });
+
+}
+
 
 setInterval(
-updateClock,
-1000
+  updateClock,
+  1000
 );
 
 updateClock();
 
 
 /* =========================
-NAVIGATION
+   LOADER
 ========================= */
 
-function hideAll(){
+window.addEventListener(
+  "load",
+  function() {
 
-document.getElementById("home")
-.style.display="none";
+    setTimeout(
+      function() {
 
-document.getElementById("film-choices")
-.style.display="none";
+        document
+          .getElementById("loader")
+          .classList.add("hidden");
 
-document.getElementById("tv-choices")
-.style.display="none";
+      },
+      4000
+    );
 
-document.getElementById("grand-galop")
-.style.display="none";
-
-document.getElementById("browser")
-.style.display="none";
-
-}
-
-
-/* =========================
-FILMS
-========================= */
-
-function ouvrirFilms(){
-
-hideAll();
-
-document.getElementById("film-choices")
-.style.display="block";
-
-}
-
-
-/* =========================
-TV
-========================= */
-
-function ouvrirTV(){
-
-hideAll();
-
-document.getElementById("tv-choices")
-.style.display="block";
-
-}
-
-
-/* =========================
-GRAND GALOP
-========================= */
-
-function ouvrirGrandGalop(){
-
-hideAll();
-
-document.getElementById("grand-galop")
-.style.display="block";
-
-document.getElementById("grand-galop")
-.scrollTop=0;
-
-}
-
-
-/* =========================
-SAISON
-========================= */
-
-function ouvrirSaison(numero){
-
-document
-.querySelectorAll(".episode-panel")
-.forEach(
-function(panel){
-
-panel.classList.remove("active");
-
-}
-);
-
-document
-.querySelectorAll(".season-card")
-.forEach(
-function(card){
-
-card.classList.remove("active");
-
-}
+  }
 );
 
 
-const panel=
-document.getElementById(
-"season"+numero
-);
-
-const button=
-document.getElementById(
-"seasonButton"+numero
-);
-
-panel.classList.add("active");
-
-button.classList.add("active");
-
-document
-.getElementById("grand-galop")
-.scrollTop=0;
-
-}
-
-
 /* =========================
-EPISODES SAISON 1
+   MUSIQUE
 ========================= */
 
-const saison1=[
+const audio =
+  document.getElementById("bgMusic");
 
-{
-id:"9Ip-n1-X1gg",
-titre:"Bienvenue au club"
-},
+const musicBtn =
+  document.getElementById("musicBtn");
 
-{
-id:"OflMQJQ7A7U",
-titre:"Sauvetage"
-},
+let musicPlaying = false;
 
-{
-id:"88lYN8YY968",
-titre:"La course d'obstacle — Partie 1"
-},
-
-{
-id:"i1RwbfOU9XA",
-titre:"La course d'obstacle — Partie 2"
-},
-
-{
-id:"RlEAlyMD7vg",
-titre:"Allez, au galop"
-},
-
-{
-id:"HgcF1ZHgxkM",
-titre:"Le Jeu de piste"
-},
-
-{
-id:"B1sJVP6VEU4",
-titre:"Une jument capricieuse"
-},
-
-{
-id:"7YAa1hpux4k",
-titre:"Silence on tourne"
-},
-
-{
-id:"GEyeIiKdMMQ",
-titre:"Le Pensionnat"
-},
-
-{
-id:"MsHGKHwNKmU",
-titre:"L'Apprentissage de la vie — Partie 1"
-},
-
-{
-id:"I40u8Zgj9EA",
-titre:"L'Apprentissage de la vie — Partie 2"
-},
-
-{
-id:"pr3hph1zHD0",
-titre:"Concurrence déloyale"
-},
-
-{
-id:"mxDzGaJgqFY",
-titre:"Quand l'amour s'en mêle"
-},
-
-{
-id:"nQKi72ErLKw",
-titre:"La Trahison"
-},
-
-{
-id:"xbl_uOcImB0",
-titre:"La Naissance d'un poulain"
-},
-
-{
-id:"58GxgoqpYgk",
-titre:"Le Cheval volant"
-},
-
-{
-id:"vfDaJ0yOJrY",
-titre:"Le Cavalier sans tête"
-},
-
-{
-id:"WdfmUv_aXWc",
-titre:"La Légende de Belle — Partie 1"
-},
-
-{
-id:"Ozb1Td2Obb8",
-titre:"La Légende de Belle — Partie 2"
-},
-
-{
-id:"dio-YOrxDxk",
-titre:"Un mauvais pari"
-},
-
-{
-id:"-NLr04kLVFU",
-titre:"Un trait sur le passé"
-},
-
-{
-id:"7LiRDFTToYY",
-titre:"Le Journal intime de Lisa"
-},
-
-{
-id:"PqsWFtWMYqc",
-titre:"La grande compétition"
-},
-
-{
-id:"2ag9GrqZ94g",
-titre:"Silence, on chuchote"
-},
-
-{
-id:"Zzpi43m-Irg",
-titre:"Un cadeau sans prix — Partie 1"
-},
-
-{
-id:"XfJtrwG5PCI",
-titre:"Un cadeau sans prix — Partie 2"
-}
-
-];
+audio.volume = .25;
 
 
-/* =========================
-PLAYLISTS SAISONS 2/3
-========================= */
+function toggleMusic() {
 
-const playlists={
+  if (musicPlaying) {
 
-2:
-"PLRRc9uNlbQLYQJWBrl5M43wnk8AMa7pFv",
+    audio.pause();
 
-3:
-"PLZf6ZLzTf5RF_vWcxxxPRgtGboCvcw9dW"
+    musicPlaying = false;
 
-};
+    musicBtn.textContent =
+      "🔇 Remettre";
 
+  } else {
 
-/* =========================
-CREER BOUTONS SAISON 1
-========================= */
+    audio.play()
+      .then(function() {
 
-function creerEpisodesSaison1(){
+        musicPlaying = true;
 
-const container=
-document.getElementById(
-"episodes1"
-);
+        musicBtn.textContent =
+          "🔊 Couper";
 
-saison1.forEach(
-function(ep,index){
+      })
+      .catch(function() {
 
-const button=
-document.createElement("button");
+        alert(
+          "Clique d'abord sur la page puis réessaie."
+        );
 
-button.className=
-"episode-button";
+      });
 
-button.innerHTML=
-"▶ Épisode "
-+
-(index+1)
-+
-"<small>"
-+
-ep.titre
-+
-"</small>";
-
-button.onclick=
-function(){
-
-lancerEpisode1(
-index,
-button
-);
-
-};
-
-container.appendChild(button);
+  }
 
 }
-);
-
-}
-
-
-/* =========================
-LANCER EPISODE EXACT
-========================= */
-
-function lancerEpisode1(
-index,
-button
-){
-
-const episode=
-saison1[index];
-
-const player=
-document.getElementById(
-"player1"
-);
-
-
-/*
-On charge directement
-l'ID individuel de la vidéo.
-*/
-
-player.src=
-"https://www.youtube.com/embed/"
-+
-episode.id
-+
-"?autoplay=1"
-+
-"&playsinline=1"
-+
-"&rel=0"
-+
-"&vq=hd1080";
-
-
-document
-.querySelectorAll(
-"#episodes1 .episode-button"
-)
-.forEach(
-function(btn){
-
-btn.classList.remove(
-"selected"
-);
-
-}
-);
-
-button.classList.add(
-"selected"
-);
-
-
-/*
-On fait remonter vers
-le lecteur.
-*/
-
-player.scrollIntoView({
-
-behavior:"smooth",
-
-block:"center"
-
-});
-
-}
-
-
-/* =========================
-CREER SAISONS 2/3
-========================= */
-
-function creerEpisodesPlaylist(
-saison
-){
-
-const container=
-document.getElementById(
-"episodes"+saison
-);
-
-for(
-let episode=1;
-episode<=26;
-episode++
-){
-
-const button=
-document.createElement("button");
-
-button.className=
-"episode-button";
-
-button.innerHTML=
-"▶ Épisode "
-+
-episode
-+
-"<small>"
-+
-"Grand Galop — Saison "
-+
-saison
-+
-"</small>";
-
-button.onclick=
-function(){
-
-lancerPlaylist(
-saison
-);
-
-};
-
-container.appendChild(button);
-
-}
-
-}
-
-
-function lancerPlaylist(
-saison
-){
-
-const player=
-document.getElementById(
-"player"+saison
-);
-
-player.src=
-"https://www.youtube.com/embed?listType=playlist&list="
-+
-playlists[saison]
-+
-"&playsinline=1&rel=0";
-
-}
-
-
-/* =========================
-RETOUR FILMS
-========================= */
-
-function retourFilms(){
-
-hideAll();
-
-document.getElementById("film-choices")
-.style.display="block";
-
-}
-
-
-/* =========================
-RETOUR ACCUEIL
-========================= */
-
-function retourAccueil(){
-
-hideAll();
-
-document.getElementById("home")
-.style.display="block";
-
-}
-
-
-/* =========================
-OUVRIR SITE
-========================= */
-
-function ouvrirSite(url){
-
-hideAll();
-
-document.getElementById("browser")
-.style.display="block";
-
-document.getElementById("webpage")
-.src=url;
-
-}
-
-
-/* =========================
-INITIALISATION
-========================= */
-
-creerEpisodesSaison1();
-
-creerEpisodesPlaylist(2);
-
-creerEpisodesPlaylist(3);
-
-
-/* =========================
-OUVRIR SAISON 1 PAR DEFAUT
-========================= */
-
-ouvrirSaison(1);
 
 </script>
 
