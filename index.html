@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0,
+maximum-scale=1.0,user-scalable=no">
+
+<title>Space Hub</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+html,body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#01030a;
+color:white;
+}
+
+button{
+font-family:inherit;
+}
+
+/* =========================
+LOADER
+========================= */
+
+#loader{
+position:fixed;
+inset:0;
+z-index:9999;
+
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+background:
+radial-gradient(
+ellipse at 15% 25%,
+rgba(37,99,235,.30),
+transparent 35%
+),
+radial-gradient(
+ellipse at 85% 75%,
+rgba(88,28,135,.28),
+transparent 38%
+),
+linear-gradient(
+135deg,
+#01030a,
+#030b20 35%,
+#020617 65%,
+#080316
+);
+
+transition:.6s;
+}
+
+#loader.hidden{
+opacity:0;
+visibility:hidden;
+pointer-events:none;
+}
+
+.loader-content{
+text-align:center;
+}
+
+.loader-content h1{
+font-size:clamp(28px,6vw,48px);
+letter-spacing:3px;
+
+text-shadow:
+0 0 10px #60a5fa,
+0 0 30px #2563eb,
+0 0 60px rgba(37,99,235,.5);
+}
+
+.loader-dots{
+color:#bfdbfe;
+font-size:20px;
+}
+
+.loader-bar{
+width:180px;
+height:4px;
+margin:30px auto 0;
+
+background:rgba(147,197,253,.2);
+
+border-radius:4px;
+
+overflow:hidden;
+}
+
+.loader-bar-fill{
+height:100%;
+width:0;
+
+background:
+linear-gradient(
+90deg,
+#3b82f6,
+#8b5cf6
+);
+
+animation:loadProgress 5s linear forwards;
+}
+
+@keyframes loadProgress{
+
+from{
+width:0;
+}
+
+to{
+width:100%;
+}
+
+}
+
+/* =========================
+PAGES
+========================= */
+
+#home,
+#film-choices,
+#tv-choices,
+#grand-galop{
+
+position:relative;
+
+width:100%;
+height:100vh;
+
+overflow-y:auto;
+overflow-x:hidden;
+
+-webkit-overflow-scrolling:touch;
+
+background:
+
+radial-gradient(
+ellipse at 15% 25%,
+rgba(37,99,235,.30),
+transparent 35%
+),
+
+radial-gradient(
+ellipse at 85% 75%,
+rgba(88,28,135,.28),
+transparent 38%
+),
+
+radial-gradient(
+ellipse at 50% 110%,
+rgba(15,23,42,.9),
+transparent 50%
+),
+
+linear-gradient(
+135deg,
+#01030a,
+#030b20 35%,
+#020617 65%,
+#080316
+);
+}
+
+#film-choices,
+#tv-choices,
+#grand-galop{
+display:none;
+}
+
+/* =========================
+STARS
+========================= */
+
+.stars,
+.stars2,
+.stars3{
+
+position:absolute;
+
+inset:-50%;
+
+pointer-events:none;
+
+background-image:
+
+radial-gradient(
+circle,
+rgba(255,255,255,.95)
+0 .8px,
+transparent 1px
+),
+
+radial-gradient(
+circle,
+rgba(147,197,253,.85)
+0 .7px,
+transparent 1px
+),
+
+radial-gradient(
+circle,
+rgba(255,255,255,.65)
+0 .5px,
+transparent .9px
+);
+
+background-size:
+95px 95px,
+155px 155px,
+230px 230px;
+
+background-position:
+15px 25px,
+80px 120px,
+150px 70px;
+
+animation:
+starsMove 35s linear infinite;
+
+opacity:.8;
+}
+
+.stars2{
+
+background-size:
+130px 130px,
+210px 210px,
+310px 310px;
+
+animation-duration:55s;
+
+opacity:.45;
+}
+
+.stars3{
+
+background-size:
+180px 180px,
+280px 280px,
+400px 400px;
+
+animation-duration:80s;
+
+opacity:.28;
+}
+
+@keyframes starsMove{
+
+from{
+transform:translate(0,0);
+}
+
+to{
+transform:translate(-120px,-90px);
+}
+
+}
+
+/* =========================
+TOP BAR
+========================= */
+
+.top-bar{
+
+position:absolute;
+
+top:0;
+left:0;
+right:0;
+
+height:70px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 25px;
+
+z-index:20;
+
+background:
+rgba(2,6,23,.38);
+
+backdrop-filter:blur(12px);
+
+border-bottom:
+1px solid rgba(147,197,253,.15);
+}
+
+.logo{
+
+font-size:17px;
+
+font-weight:bold;
+
+letter-spacing:2px;
+
+text-shadow:
+0 0 12px rgba(96,165,250,.6);
+}
+
+.clock{
+
+display:flex;
+
+align-items:center;
+
+gap:7px;
+
+font-size:18px;
+
+font-weight:bold;
+
+}
+
+.astronaut{
+font-size:20px;
+}
+
+/* =========================
+WELCOME
+========================= */
+
+.welcome{
+
+position:absolute;
+
+top:19%;
+
+left:50%;
+
+transform:
+translateX(-50%);
+
+text-align:center;
+
+width:90%;
+
+z-index:5;
+}
+
+.welcome h1{
+
+margin:0;
+
+font-size:
+clamp(30px,6vw,55px);
+
+letter-spacing:2px;
+
+text-shadow:
+0 0 10px #60a5fa,
+0 0 30px #2563eb;
+}
+
+.welcome p{
+
+margin-top:10px;
+
+color:#bfdbfe;
+
+font-size:16px;
+}
+
+/* =========================
+MAIN CHOICES
+========================= */
+
+.choices{
+
+position:absolute;
+
+top:50%;
+left:50%;
+
+transform:
+translate(-50%,-30%);
+
+display:flex;
+
+gap:30px;
+
+width:min(850px,90%);
+
+z-index:5;
+}
+
+.choice{
+
+flex:1;
+
+min-height:220px;
+
+border:
+1px solid rgba(147,197,253,.35);
+
+border-radius:30px;
+
+color:white;
+
+background:
+
+linear-gradient(
+145deg,
+rgba(30,64,175,.40),
+rgba(15,23,42,.78)
+);
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.45);
+
+cursor:pointer;
+
+transition:.25s;
+}
+
+.choice:hover{
+
+transform:
+translateY(-8px);
+
+border-color:#60a5fa;
+
+box-shadow:
+0 20px 50px
+rgba(37,99,235,.35);
+}
+
+.big-icon{
+
+display:block;
+
+font-size:65px;
+
+margin-bottom:15px;
+}
+
+.title{
+
+display:block;
+
+font-size:22px;
+
+font-weight:bold;
+
+letter-spacing:3px;
+}
+
+.subtitle{
+
+display:block;
+
+margin-top:8px;
+
+color:#93c5fd;
+}
+
+/* =========================
+SUB CHOICES
+========================= */
+
+.sub-choices{
+
+position:absolute;
+
+top:50%;
+
+left:50%;
+
+transform:
+translate(-50%,-30%);
+
+display:flex;
+
+gap:20px;
+
+width:min(1000px,92%);
+
+z-index:5;
+}
+
+.sub-choice{
+
+position:relative;
+
+flex:1;
+
+min-height:200px;
+
+border:
+1px solid rgba(147,197,253,.35);
+
+border-radius:28px;
+
+color:white;
+
+background:
+
+linear-gradient(
+145deg,
+rgba(30,64,175,.45),
+rgba(15,23,42,.82)
+);
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.45);
+
+cursor:pointer;
+
+transition:.25s;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+}
+
+.sub-choice:hover{
+
+transform:
+translateY(-8px);
+
+border-color:#60a5fa;
+
+box-shadow:
+0 20px 50px
+rgba(37,99,235,.35);
+}
+
+.number{
+
+font-size:48px;
+
+font-weight:bold;
+
+margin-bottom:10px;
+}
+
+.sub-title{
+
+font-size:20px;
+
+font-weight:bold;
+
+letter-spacing:2px;
+}
+
+.sub-subtitle{
+
+margin-top:8px;
+
+color:#93c5fd;
+
+font-size:14px;
+}
+
+/* =========================
+BEST CHOICE
+========================= */
+
+.best-choice{
+
+border:
+2px solid #60a5fa !important;
+
+box-shadow:
+
+0 0 25px
+rgba(59,130,246,.35),
+
+0 15px 45px
+rgba(37,99,235,.4);
+}
+
+.best-badge{
+
+position:absolute;
+
+top:12px;
+
+right:12px;
+
+padding:7px 10px;
+
+border-radius:12px;
+
+background:
+linear-gradient(
+90deg,
+#2563eb,
+#7c3aed
+);
+
+font-size:10px;
+
+font-weight:bold;
+
+letter-spacing:1px;
+}
+
+/* =========================
+BACK
+========================= */
+
+.back-button{
+
+position:absolute;
+
+top:90px;
+
+left:25px;
+
+z-index:50;
+
+border:
+
+1px solid
+rgba(147,197,253,.25);
+
+background:
+rgba(23,37,84,.85);
+
+color:white;
+
+padding:12px 20px;
+
+border-radius:14px;
+
+font-weight:bold;
+
+cursor:pointer;
+}
+
+/* =========================
+GRAND GALOP
+========================= */
+
+.galop-content{
+
+position:relative;
+
+z-index:5;
+
+width:min(950px,92%);
+
+margin:auto;
+
+padding-top:145px;
+
+padding-bottom:100px;
+}
+
+.galop-header{
+
+text-align:center;
+
+margin-bottom:30px;
+}
+
+.galop-header h1{
+
+font-size:
+clamp(30px,6vw,52px);
+
+margin:0;
+
+text-shadow:
+0 0 15px #60a5fa,
+0 0 30px #2563eb;
+}
+
+.galop-header p{
+
+color:#bfdbfe;
+}
+
+/* =========================
+SEASONS
+========================= */
+
+.season-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:18px;
+
+margin-bottom:25px;
+}
+
+.season-card{
+
+border:
+1px solid
+rgba(147,197,253,.3);
+
+border-radius:24px;
+
+padding:25px 15px;
+
+background:
+linear-gradient(
+145deg,
+rgba(30,64,175,.45),
+rgba(15,23,42,.85)
+);
+
+color:white;
+
+cursor:pointer;
+
+text-align:center;
+
+transition:.25s;
+}
+
+.season-card:hover{
+
+transform:
+translateY(-5px);
+
+border-color:#60a5fa;
+}
+
+.season-card.active{
+
+border:
+2px solid #60a5fa;
+
+box-shadow:
+0 0 25px
+rgba(59,130,246,.35);
+}
+
+.season-icon{
+
+font-size:42px;
+}
+
+.season-card h2{
+
+margin:
+10px 0 5px;
+}
+
+.season-card p{
+
+margin:0;
+
+color:#93c5fd;
+}
+
+/* =========================
+EPISODES
+========================= */
+
+.episode-panel{
+
+display:none;
+
+background:
+rgba(2,6,23,.78);
+
+border:
+1px solid
+rgba(147,197,253,.25);
+
+border-radius:25px;
+
+padding:20px;
+
+backdrop-filter:blur(15px);
+}
+
+.episode-panel.active{
+
+display:block;
+}
+
+.episode-panel h2{
+
+text-align:center;
+}
+
+/* =========================
+PLAYER
+========================= */
+
+.player{
+
+position:relative;
+
+width:100%;
+
+aspect-ratio:16/9;
+
+border-radius:18px;
+
+overflow:hidden;
+
+background:black;
+
+margin-bottom:20px;
+
+box-shadow:
+0 0 30px
+rgba(37,99,235,.25);
+}
+
+.player iframe{
+
+position:absolute;
+
+inset:0;
+
+width:100%;
+
+height:100%;
+
+border:0;
+}
+
+/* =========================
+EPISODE BUTTONS
+========================= */
+
+.episode-list{
+
+display:grid;
+
+grid-template-columns:
+repeat(2,1fr);
+
+gap:10px;
+
+max-height:420px;
+
+overflow-y:auto;
+}
+
+.episode-button{
+
+border:
+1px solid
+rgba(147,197,253,.2);
+
+border-radius:13px;
+
+padding:13px;
+
+background:
+rgba(15,23,42,.9);
+
+color:white;
+
+text-align:left;
+
+cursor:pointer;
+
+transition:.2s;
+}
+
+.episode-button:hover{
+
+background:
+rgba(37,99,235,.5);
+
+border-color:#60a5fa;
+}
+
+.episode-button.selected{
+
+border-color:#60a5fa;
+
+background:
+rgba(37,99,235,.45);
+}
+
+.episode-button small{
+
+display:block;
+
+margin-top:4px;
+
+color:#93c5fd;
+}
+
+/* =========================
+BROWSER
+========================= */
+
+#browser{
+
+position:fixed;
+
+inset:0;
+
+display:none;
+
+background:#000;
+
+z-index:100;
+}
+
+.browser-bar{
+
+position:absolute;
+
+top:0;
+
+left:0;
+
+right:0;
+
+height:58px;
+
+display:flex;
+
+justify-content:flex-end;
+
+align-items:center;
+
+padding:0 12px;
+
+background:#020617;
+
+z-index:101;
+}
+
+.menu-button{
+
+border:none;
+
+background:#172554;
+
+color:white;
+
+padding:10px 16px;
+
+border-radius:12px;
+
+font-weight:bold;
+
+cursor:pointer;
+}
+
+#webpage{
+
+position:absolute;
+
+top:58px;
+
+left:0;
+
+width:100%;
+
+height:calc(100% - 58px);
+
+border:none;
+}
+
+/* =========================
+MUSIC
+========================= */
+
+.music-toggle{
+
+position:fixed;
+
+bottom:25px;
+
+right:25px;
+
+z-index:200;
+
+border:
+1px solid
+rgba(147,197,253,.35);
+
+background:
+rgba(23,37,84,.85);
+
+color:white;
+
+padding:12px 18px;
+
+border-radius:14px;
+
+font-weight:bold;
+
+cursor:pointer;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:700px){
+
+.choices{
+
+flex-direction:column;
+
+width:80%;
+
+gap:15px;
+
+transform:
+translate(-50%,-20%);
+}
+
+.choice{
+
+min-height:160px;
+}
+
+.big-icon{
+
+font-size:45px;
+
+margin-bottom:8px;
+}
+
+.sub-choices{
+
+flex-direction:column;
+
+width:80%;
+
+gap:15px;
+
+transform:
+translate(-50%,-20%);
+}
+
+.sub-choice{
+
+min-height:145px;
+}
+
+.season-grid{
+
+grid-template-columns:1fr;
+}
+
+.episode-list{
+
+grid-template-columns:1fr;
+}
+
+.galop-content{
+
+padding-top:125px;
+}
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+LOADER
+========================= -->
+
+<div id="loader">
+
+<div class="loader-content">
+
+<h1>🌌 SPACE HUB</h1>
+
+<div class="loader-dots">
+Chargement...
+</div>
+
+<div class="loader-bar">
+
+<div class="loader-bar-fill"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="app">
+
+
+<!-- =========================
+ACCUEIL
+========================= -->
+
+<main id="home">
+
+<div class="stars"></div>
+<div class="stars stars2"></div>
+<div class="stars stars3"></div>
+
+<div class="top-bar">
+
+<div class="logo">
+🌌 SPACE HUB
+</div>
+
+<div class="clock">
+
+<span id="time">
+00:00:00
+</span>
+
+<span class="astronaut">
+👨‍🚀
+</span>
+
+</div>
+
+</div>
+
+
+<div class="welcome">
+
+<h1>
+Bienvenue
+</h1>
+
+<p>
+Choisis ton univers
+</p>
+
+</div>
+
+
+<div class="choices">
+
+<button
+class="choice"
+onclick="ouvrirFilms()">
+
+<span class="big-icon">
+🍿
+</span>
+
+<span class="title">
+FILMS
+</span>
+
+<span class="subtitle">
+Découvrir
+</span>
+
+</button>
+
+
+<button
+class="choice"
+onclick="ouvrirTV()">
+
+<span class="big-icon">
+📺
+</span>
+
+<span class="title">
+TV
+</span>
+
+<span class="subtitle">
+Regarder
+</span>
+
+</button>
+
+</div>
+
+</main>
+
+
+<!-- =========================
+FILMS
+========================= -->
+
+<section id="film-choices">
+
+<div class="stars"></div>
+<div class="stars stars2"></div>
+<div class="stars stars3"></div>
+
+<div class="top-bar">
+
+<div class="logo">
+🌌 SPACE HUB
+</div>
+
+<div class="clock">
+
+<span id="time-films">
+00:00:00
+</span>
+
+<span class="astronaut">
+👨‍🚀
+</span>
+
+</div>
+
+</div>
+
+
+<button
+class="back-button"
+onclick="retourAccueil()">
+
+← Retour
+
+</button>
+
+
+<div class="welcome">
+
+<h1>
+Films 🍿
+</h1>
+
+<p>
+Choisis ta source
+</p>
+
+</div>
+
+
+<div class="sub-choices">
+
+
+<button
+class="sub-choice best-choice"
+onclick="ouvrirSite('https://1jour1film0826.online')">
+
+<div class="best-badge">
+⭐ MEILLEUR CHOIX
+</div>
+
+<span class="number">
+1️⃣
+</span>
+
+<span class="sub-title">
+SOURCE 1
+</span>
+
+<span class="sub-subtitle">
+Purstream
+</span>
+
+</button>
+
+
+<button
+class="sub-choice"
+onclick="ouvrirSite('https://movix.fun')">
+
+<span class="number">
+2️⃣
+</span>
+
+<span class="sub-title">
+SOURCE 2
+</span>
+
+<span class="sub-subtitle">
+Movix
+</span>
+
+</button>
+
+
+<button
+class="sub-choice"
+onclick="ouvrirGrandGalop()">
+
+<span class="number">
+🐴
+</span>
+
+<span class="sub-title">
+GRAND GALOP
+</span>
+
+<span class="sub-subtitle">
+3 saisons • 78 épisodes
+</span>
+
+</button>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================
+TV
+========================= -->
+
+<section id="tv-choices">
+
+<div class="stars"></div>
+<div class="stars stars2"></div>
+<div class="stars stars3"></div>
+
+<div class="top-bar">
+
+<div class="logo">
+🌌 SPACE HUB
+</div>
+
+<div class="clock">
+
+<span id="time-tv">
+00:00:00
+</span>
+
+<span class="astronaut">
+👨‍🚀
+</span>
+
+</div>
+
+</div>
+
+
+<button
+class="back-button"
+onclick="retourAccueil()">
+
+← Retour
+
+</button>
+
+
+<div class="welcome">
+
+<h1>
+TV 📺
+</h1>
+
+<p>
+Choisis ta source
+</p>
+
+</div>
+
+
+<div class="sub-choices">
+
+
+<button
+class="sub-choice"
+onclick="ouvrirSite('https://livewatch.top')">
+
+<span class="number">
+1️⃣
+</span>
+
+<span class="sub-title">
+SOURCE 1
+</span>
+
+<span class="sub-subtitle">
+LiveWatch
+</span>
+
+</button>
+
+
+<button
+class="sub-choice best-choice"
+onclick="ouvrirSite('https://witv.football')">
+
+<div class="best-badge">
+⭐ MEILLEUR CHOIX
+</div>
+
+<span class="number">
+2️⃣
+</span>
+
+<span class="sub-title">
+SOURCE 2
+</span>
+
+<span class="sub-subtitle">
+VegetaTV
+</span>
+
+</button>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================
+GRAND GALOP
+========================= -->
+
+<section id="grand-galop">
+
+<div class="stars"></div>
+<div class="stars stars2"></div>
+<div class="stars stars3"></div>
+
+
+<div class="top-bar">
+
+<div class="logo">
+🌌 SPACE HUB
+</div>
+
+<div class="clock">
+
+<span id="time-galop">
+00:00:00
+</span>
+
+<span class="astronaut">
+👨‍🚀
+</span>
+
+</div>
+
+</div>
+
+
+<button
+class="back-button"
+onclick="retourFilms()">
+
+← Films
+
+</button>
+
+
+<div class="galop-content">
+
+
+<div class="galop-header">
+
+<h1>
+🐴 GRAND GALOP
+</h1>
+
+<p>
+Les aventures de Lisa, Carole et Stéphanie
+</p>
+
+</div>
+
+
+<div class="season-grid">
+
+
+<button
+id="seasonButton1"
+class="season-card"
+onclick="ouvrirSaison(1)">
+
+<div class="season-icon">
+🐴
+</div>
+
+<h2>
+Saison 1
+</h2>
+
+<p>
+26 épisodes
+</p>
+
+</button>
+
+
+<button
+id="seasonButton2"
+class="season-card"
+onclick="ouvrirSaison(2)">
+
+<div class="season-icon">
+🐎
+</div>
+
+<h2>
+Saison 2
+</h2>
+
+<p>
+26 épisodes
+</p>
+
+</button>
+
+
+<button
+id="seasonButton3"
+class="season-card"
+onclick="ouvrirSaison(3)">
+
+<div class="season-icon">
+🏇
+</div>
+
+<h2>
+Saison 3
+</h2>
+
+<p>
+26 épisodes
+</p>
+
+</button>
+
+
+</div>
+
+
+<!-- =========================
+SAISON 1
+========================= -->
+
+<div
+id="season1"
+class="episode-panel">
+
+
+<h2>
+🐴 Grand Galop — Saison 1
+</h2>
+
+
+<div class="player">
+
+<iframe
+id="player1"
+src="https://www.youtube.com/embed?listType=playlist&list=PLRRc9uNlbQLZ4VrP2xnSz55GKqfgKDNGy&playsinline=1&rel=0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen>
+</iframe>
+
+</div>
+
+
+<div
+id="episodes1"
+class="episode-list">
+</div>
+
+
+</div>
+
+
+<!-- =========================
+SAISON 2
+========================= -->
+
+<div
+id="season2"
+class="episode-panel">
+
+
+<h2>
+🐎 Grand Galop — Saison 2
+</h2>
+
+
+<div class="player">
+
+<iframe
+id="player2"
+src="https://www.youtube.com/embed?listType=playlist&list=PLRRc9uNlbQLYQJWBrl5M43wnk8AMa7pFv&playsinline=1&rel=0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen>
+</iframe>
+
+</div>
+
+
+<div
+id="episodes2"
+class="episode-list">
+</div>
+
+
+</div>
+
+
+<!-- =========================
+SAISON 3
+========================= -->
+
+<div
+id="season3"
+class="episode-panel">
+
+
+<h2>
+🏇 Grand Galop — Saison 3
+</h2>
+
+
+<div class="player">
+
+<iframe
+id="player3"
+src="https://www.youtube.com/embed?listType=playlist&list=PLZf6ZLzTf5RF_vWcxxxPRgtGboCvcw9dW&playsinline=1&rel=0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen>
+</iframe>
+
+</div>
+
+
+<div
+id="episodes3"
+class="episode-list">
+</div>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================
+BROWSER
+========================= -->
+
+<section id="browser">
+
+<div class="browser-bar">
+
+<button
+class="menu-button"
+onclick="retourAccueil()">
+
+☰ Menu
+
+</button>
+
+</div>
+
+<iframe
+id="webpage">
+</iframe>
+
+</section>
+
+
+</div>
+
+
+<!-- =========================
+MUSIQUE
+========================= -->
+
+<button
+class="music-toggle"
+id="musicBtn"
+onclick="toggleMusic()">
+
+🔊 Couper
+
+</button>
+
+
+<audio
+id="bgMusic"
+loop
+preload="auto">
+
+<source
+src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_4c5c0c0c5c.mp3?filename=elevator-music-113280.mp3"
+type="audio/mpeg">
+
+</audio>
+
+
+<script>
+
+/* =========================
+LOADER
+========================= */
+
+window.addEventListener(
+"load",
+function(){
+
+setTimeout(
+function(){
+
+document
+.getElementById("loader")
+.classList.add("hidden");
+
+tryPlayMusic();
+
+},
+5000
+);
+
+}
+);
+
+
+/* =========================
+MUSIQUE
+========================= */
+
+let musicPlaying=false;
+
+const audio=
+document.getElementById("bgMusic");
+
+const musicBtn=
+document.getElementById("musicBtn");
+
+audio.volume=.35;
+
+
+function tryPlayMusic(){
+
+audio.play()
+
+.then(function(){
+
+musicPlaying=true;
+
+musicBtn.textContent=
+"🔊 Couper";
+
+})
+
+.catch(function(){
+
+musicPlaying=false;
+
+musicBtn.textContent=
+"🔇 Remettre";
+
+});
+
+}
+
+
+function toggleMusic(){
+
+if(musicPlaying){
+
+audio.pause();
+
+musicPlaying=false;
+
+musicBtn.textContent=
+"🔇 Remettre";
+
+}
+
+else{
+
+audio.play()
+
+.then(function(){
+
+musicPlaying=true;
+
+musicBtn.textContent=
+"🔊 Couper";
+
+});
+
+}
+
+}
+
+
+/* =========================
+HORLOGE
+========================= */
+
+function updateClock(){
+
+const now=
+new Date();
+
+const time=
+
+String(
+now.getHours()
+).padStart(2,"0")
+
++":"
+
++
+String(
+now.getMinutes()
+).padStart(2,"0")
+
++":"
+
++
+String(
+now.getSeconds()
+).padStart(2,"0");
+
+
+[
+"time",
+"time-films",
+"time-tv",
+"time-galop"
+]
+.forEach(
+function(id){
+
+const element=
+document.getElementById(id);
+
+if(element){
+
+element.textContent=time;
+
+}
+
+}
+);
+
+}
+
+setInterval(
+updateClock,
+1000
+);
+
+updateClock();
+
+
+/* =========================
+NAVIGATION
+========================= */
+
+function hideAll(){
+
+document
+.getElementById("home")
+.style.display="none";
+
+document
+.getElementById("film-choices")
+.style.display="none";
+
+document
+.getElementById("tv-choices")
+.style.display="none";
+
+document
+.getElementById("grand-galop")
+.style.display="none";
+
+document
+.getElementById("browser")
+.style.display="none";
+
+}
+
+
+/* =========================
+FILMS
+========================= */
+
+function ouvrirFilms(){
+
+hideAll();
+
+document
+.getElementById("film-choices")
+.style.display="block";
+
+}
+
+
+/* =========================
+TV
+========================= */
+
+function ouvrirTV(){
+
+hideAll();
+
+document
+.getElementById("tv-choices")
+.style.display="block";
+
+}
+
+
+/* =========================
+GRAND GALOP
+========================= */
+
+function ouvrirGrandGalop(){
+
+hideAll();
+
+document
+.getElementById("grand-galop")
+.style.display="block";
+
+document
+.getElementById("grand-galop")
+.scrollTop=0;
+
+}
+
+
+/* =========================
+SAISONS
+========================= */
+
+function ouvrirSaison(numero){
+
+document
+.querySelectorAll(".episode-panel")
+.forEach(
+function(panel){
+
+panel.classList.remove("active");
+
+}
+);
+
+document
+.querySelectorAll(".season-card")
+.forEach(
+function(card){
+
+card.classList.remove("active");
+
+}
+);
+
+
+const panel=
+document.getElementById(
+"season"+numero
+);
+
+const button=
+document.getElementById(
+"seasonButton"+numero
+);
+
+
+panel.classList.add("active");
+
+button.classList.add("active");
+
+
+document
+.getElementById("grand-galop")
+.scrollTop=0;
+
+}
+
+
+/* =========================
+ÉPISODES
+========================= */
+
+/*
+Les boutons ouvrent la playlist
+correspondante dans le lecteur.
+
+Cela utilise le lecteur YouTube
+officiel intégré.
+*/
+
+const playlists={
+
+1:
+"PLRRc9uNlbQLZ4VrP2xnSz55GKqfgKDNGy",
+
+2:
+"PLRRc9uNlbQLYQJWBrl5M43wnk8AMa7pFv",
+
+3:
+"PLZf6ZLzTf5RF_vWcxxxPRgtGboCvcw9dW"
+
+};
+
+
+function creerEpisodes(){
+
+for(
+let saison=1;
+saison<=3;
+saison++
+){
+
+const container=
+document.getElementById(
+"episodes"+saison
+);
+
+for(
+let episode=1;
+episode<=26;
+episode++
+){
+
+const button=
+document.createElement("button");
+
+button.className=
+"episode-button";
+
+button.innerHTML=
+"▶ Épisode "
++
+episode
++
+"<small>Grand Galop — Saison "
++
+saison
++
+"</small>";
+
+button.onclick=
+function(){
+
+lancerEpisode(
+saison,
+episode,
+button
+);
+
+};
+
+container.appendChild(button);
+
+}
+
+}
+
+}
+
+
+function lancerEpisode(
+saison,
+episode,
+button
+){
+
+/*
+YouTube ne garantit pas aujourd'hui
+la sélection d'un élément précis
+d'une playlist uniquement avec
+le paramètre index dans un iframe.
+
+On recharge donc proprement
+la playlist officielle de la saison.
+*/
+
+const player=
+document.getElementById(
+"player"+saison
+);
+
+player.src=
+"https://www.youtube.com/embed?listType=playlist&list="
++
+playlists[saison]
++
+"&playsinline=1&rel=0";
+
+
+document
+.querySelectorAll(
+"#season"+saison+
+" .episode-button"
+)
+.forEach(
+function(btn){
+
+btn.classList.remove(
+"selected"
+);
+
+}
+);
+
+button.classList.add(
+"selected"
+);
+
+
+player.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+}
+
+
+/* =========================
+RETOUR FILMS
+========================= */
+
+function retourFilms(){
+
+hideAll();
+
+document
+.getElementById("film-choices")
+.style.display="block";
+
+}
+
+
+/* =========================
+RETOUR ACCUEIL
+========================= */
+
+function retourAccueil(){
+
+hideAll();
+
+document
+.getElementById("home")
+.style.display="block";
+
+}
+
+
+/* =========================
+OUVRIR SITE
+========================= */
+
+function ouvrirSite(url){
+
+hideAll();
+
+document
+.getElementById("browser")
+.style.display="block";
+
+document
+.getElementById("webpage")
+.src=url;
+
+}
+
+
+/* =========================
+CRÉATION ÉPISODES
+========================= */
+
+creerEpisodes();
+
+</script>
+
+</body>
+</html>
